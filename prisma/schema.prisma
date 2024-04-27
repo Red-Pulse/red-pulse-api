@@ -8,8 +8,19 @@ datasource db {
 }
 
 model BloodType {
-  id         Int      @id @default(autoincrement())
-  short_name String   @unique
-  long_name  String   @unique
-  type       String   @unique
+  id        Int    @id @default(autoincrement())
+  shortName String @unique
+  longName  String @unique
+  type      String @unique
+  users     User[]
+}
+
+model User {
+  id          Int       @id @default(autoincrement())
+  firstName   String
+  lastName    String
+  phone       String
+  otp         String?
+  bloodTypeId Int
+  bloodType   BloodType @relation(fields: [bloodTypeId], references: [id])
 }

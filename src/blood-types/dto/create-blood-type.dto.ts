@@ -3,11 +3,11 @@ import { IsNotEmpty, IsString } from 'class-validator';
 export class CreateBloodTypeDto {
   @IsString()
   @IsNotEmpty()
-  short_name: string;
+  shortName: string;
 
   @IsString()
   @IsNotEmpty()
-  long_name: string;
+  longName: string;
 
   @IsString()
   @IsNotEmpty()

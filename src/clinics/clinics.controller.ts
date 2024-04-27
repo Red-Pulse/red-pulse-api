@@ -21,6 +21,17 @@ export class ClinicsController {
     });
   }
 
+  @Post('/join')
+  makeDonation(@Body() data: { clinicId: number; userId: number }): Promise<Clinic> {
+    return this.clinicsService.update(data.clinicId, {
+      users: {
+        connect: {
+          id: data.userId
+        }
+      }
+    });
+  }
+
   @Get()
   findAll() {
     return this.clinicsService.findAll();

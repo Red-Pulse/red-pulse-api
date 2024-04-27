@@ -19,7 +19,8 @@ export class ClinicsService {
         name: true,
         latitude: true,
         longitude: true,
-        needBloods: true
+        needBloods: true,
+        users: true
       }
     });
   }

@@ -24,6 +24,7 @@ model User {
   otp         String?
   bloodTypeId Int
   bloodType   BloodType @relation(fields: [bloodTypeId], references: [id])
+  clinics     Clinic[]
 }
 
 model Clinic {
@@ -34,4 +35,5 @@ model Clinic {
   longitude  Decimal
   address    String
   needBloods BloodType[]
+  users      User[]
 }

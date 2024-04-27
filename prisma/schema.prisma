@@ -7,84 +7,9 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model File {
-  id   Int    @id @default(autoincrement())
-  name String
-  type String
-  User User[]
-}
-
-model User {
-  id          Int            @id @default(autoincrement())
-  firstName   String
-  lastName    String
-  phone       Int
-  birthday    DateTime
-  otp         Int?
-  photo       File?          @relation(fields: [photoId], references: [id])
-  photoId     Int?
-  bloodType   BloodType      @relation(fields: [bloodTypeId], references: [id])
-  bloodTypeId Int
-  donations   ClinicDonor[]
-  ratings     ClinicRating[]
-}
-
-model Clinic {
-  id         Int               @id @default(autoincrement())
-  inn        Int
-  name       String
-  location   Int
-  address    String
-  needBloods ClinicNeedBlood[]
-  donations  ClinicDonor[]
-  ratings    ClinicRating[]
-}
-
-model ClinicDonor {
-  clinic   Clinic @relation(fields: [clinicId], references: [id])
-  clinicId Int
-  user     User   @relation(fields: [userId], references: [id])
-  userId   Int
-
-  @@id([clinicId, userId])
-}
-
-model ClinicRating {
-  user     User    @relation(fields: [userId], references: [id])
-  userId   Int
-  clinic   Clinic  @relation(fields: [clinicId], references: [id])
-  clinicId Int
-  comment  String?
-  rate     Float
-
-  @@id([userId, clinicId])
-}
-
 model BloodType {
-  id        Int               @id @default(autoincrement())
-  shortName String
-  longName  String
-  type      String
-  users     User[]
-  clinics   ClinicNeedBlood[]
-}
-
-model ClinicNeedBlood {
-  clinic      Clinic    @relation(fields: [clinicId], references: [id])
-  clinicId    Int
-  bloodType   BloodType @relation(fields: [bloodTypeId], references: [id])
-  bloodTypeId Int
-
-  @@id([clinicId, bloodTypeId])
-}
-
-enum BloodType {
-  Positive_A
-  Positive_B
-  Positive_AB
-  Positive_0
-  Negative_A
-  Negative_B
-  Negative_AB
-  Negative_0
+  id         Int      @id @default(autoincrement())
+  short_name String   @unique
+  long_name  String   @unique
+  type       String   @unique
 }

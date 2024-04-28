@@ -29,6 +29,19 @@ export class ClinicsController {
     });
   }
 
+  @Post('/disconnect')
+  disconnectDonation(
+    @Body() data: { clinicId: number; userId: number },
+  ): Promise<Clinic> {
+    return this.clinicsService.update(data.clinicId, {
+      users: {
+        disconnect: {
+          id: data.userId,
+        },
+      },
+    });
+  }
+
   @Get()
   findAll() {
     return this.clinicsService.findAll();

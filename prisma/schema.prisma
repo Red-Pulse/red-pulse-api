@@ -21,7 +21,8 @@ model User {
   firstName   String
   lastName    String
   phone       String
-  otp         String?
+  photo       String
+  password    String
   bloodTypeId Int
   bloodType   BloodType @relation(fields: [bloodTypeId], references: [id])
   clinics     Clinic[]

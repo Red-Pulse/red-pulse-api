@@ -18,6 +18,7 @@ export class UsersService {
         lastName: true,
         firstName: true,
         phone: true,
+        photo: true,
       },
     });
   }
@@ -38,11 +39,11 @@ export class UsersService {
     return this.prisma.user.create({ data });
   }
 
-  async loginUser(phone: string, otp: string): Promise<User | null> {
+  async loginUser(phone: string, password: string): Promise<User | null> {
     return this.prisma.user.findFirst({
       where: {
         phone,
-        otp,
+        password,
       },
       include: {
         bloodType: true,

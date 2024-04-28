@@ -70,6 +70,13 @@ export class ClinicsController {
     });
   }
 
+  @Get(':id/joined-users')
+  async findJoinedClinics(@Param('id') id: string) {
+    const clinic = await this.clinicsService.joinedUsers(+id);
+
+    return clinic.users;
+  }
+
   @Get()
   findAll() {
     return this.clinicsService.findAll();

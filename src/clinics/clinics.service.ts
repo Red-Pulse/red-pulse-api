@@ -21,6 +21,24 @@ export class ClinicsService {
     });
   }
 
+  async joinedUsers(clinicId: number) {
+    return this.prisma.clinic.findUnique({
+      where: { id: clinicId },
+      select: {
+        users: {
+          select: {
+            id: true,
+            phone: true,
+            bloodType: true,
+            firstName: true,
+            lastName: true,
+            photo: true,
+          },
+        },
+      },
+    });
+  }
+
   async findOne(id: number): Promise<Clinic | null> {
     return this.prisma.clinic.findUnique({ where: { id } });
   }

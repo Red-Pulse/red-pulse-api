@@ -23,8 +23,30 @@ export class UsersService {
     });
   }
 
-  async findOne(id: number): Promise<User | null> {
-    return this.prisma.user.findUnique({ where: { id } });
+  async joinedClinics(userId: number) {
+    return this.prisma.user.findUnique({
+      where: { id: userId },
+      select: {
+        clinics: {
+          select: {
+            id: true,
+            inn: true,
+            address: true,
+            name: true,
+            latitude: true,
+            longitude: true,
+            needBloods: true,
+          },
+        },
+      },
+    });
+  }
+
+  async findOne(id: number) {
+    return this.prisma.user.findUnique({
+      where: { id },
+      include: { clinics: true },
+    });
   }
 
   async update(id: number, data: Prisma.UserUpdateInput): Promise<User> {

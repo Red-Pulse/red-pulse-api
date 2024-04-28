@@ -46,6 +46,13 @@ export class UsersController {
     return user;
   }
 
+  @Get(':id/joined-clinics')
+  async findJoinedClinics(@Param('id') id: string) {
+    const user = await this.usersService.joinedClinics(+id);
+
+    return user.clinics;
+  }
+
   @Get()
   findAll() {
     return this.usersService.findAll();

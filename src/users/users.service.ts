@@ -58,7 +58,10 @@ export class UsersService {
   }
 
   async registerUser(data: Prisma.UserCreateInput): Promise<User> {
-    return this.prisma.user.create({ data });
+    return this.prisma.user.create({
+      data,
+      include: { bloodType: true },
+    });
   }
 
   async loginUser(phone: string, password: string): Promise<User | null> {

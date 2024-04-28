@@ -39,6 +39,8 @@ export class UsersController {
   ): Promise<User | null> {
     const user = await this.usersService.loginUser(phone, password);
 
+    console.log(phone, password);
+
     if (!user) {
       throw new UnauthorizedException();
     }

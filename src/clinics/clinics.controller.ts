@@ -17,7 +17,7 @@ export class ClinicsController {
   constructor(private readonly clinicsService: ClinicsService) {}
 
   @Post('register')
-  async registerClinic(@Body() clinic: CreateClinicDto): Promise<Clinic> {
+  async registerClinic(@Body() clinic: CreateClinicDto) {
     return this.clinicsService.register({
       inn: clinic.inn,
       name: clinic.name,

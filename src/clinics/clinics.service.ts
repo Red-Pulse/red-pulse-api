@@ -51,8 +51,19 @@ export class ClinicsService {
     return this.prisma.clinic.delete({ where: { id } });
   }
 
-  async register(data: Prisma.ClinicCreateInput): Promise<Clinic> {
-    return this.prisma.clinic.create({ data });
+  async register(data: Prisma.ClinicCreateInput) {
+    return this.prisma.clinic.create({
+      data,
+      select: {
+        id: true,
+        inn: true,
+        needBloods: true,
+        latitude: true,
+        longitude: true,
+        name: true,
+        address: true,
+      },
+    });
   }
 
   async login(inn: number, password: string): Promise<Clinic | null> {

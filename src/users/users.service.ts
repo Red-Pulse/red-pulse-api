@@ -17,8 +17,8 @@ export class UsersService {
         bloodType: true,
         lastName: true,
         firstName: true,
-        phone: true
-      }
+        phone: true,
+      },
     });
   }
 
@@ -32,5 +32,21 @@ export class UsersService {
 
   async remove(id: number): Promise<User> {
     return this.prisma.user.delete({ where: { id } });
+  }
+
+  async registerUser(data: Prisma.UserCreateInput): Promise<User> {
+    return this.prisma.user.create({ data });
+  }
+
+  async loginUser(phone: string, otp: string): Promise<User | null> {
+    return this.prisma.user.findFirst({
+      where: {
+        phone,
+        otp,
+      },
+      include: {
+        bloodType: true,
+      },
+    });
   }
 }

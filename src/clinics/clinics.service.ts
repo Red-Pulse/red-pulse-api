@@ -1,14 +1,10 @@
 import { Injectable } from '@nestjs/common';
-import {PrismaService} from '../prisma/prisma.service';
+import { PrismaService } from '../prisma/prisma.service';
 import { Clinic, Prisma } from '@prisma/client';
 
 @Injectable()
 export class ClinicsService {
   constructor(private prisma: PrismaService) {}
-
-  async create(data: Prisma.ClinicCreateInput): Promise<Clinic> {
-    return this.prisma.clinic.create({ data });
-  }
 
   async findAll() {
     return this.prisma.clinic.findMany({
@@ -20,8 +16,8 @@ export class ClinicsService {
         latitude: true,
         longitude: true,
         needBloods: true,
-        users: true
-      }
+        users: true,
+      },
     });
   }
 
@@ -35,5 +31,13 @@ export class ClinicsService {
 
   async remove(id: number): Promise<Clinic> {
     return this.prisma.clinic.delete({ where: { id } });
+  }
+
+  async register(data: Prisma.ClinicCreateInput): Promise<Clinic> {
+    return this.prisma.clinic.create({ data });
+  }
+
+  async login(inn: number, password: string): Promise<Clinic | null> {
+    return this.prisma.clinic.findFirst({ where: { inn, password } });
   }
 }

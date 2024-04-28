@@ -1,9 +1,19 @@
-import { ArrayNotEmpty, IsArray, IsNotEmpty, IsNumber, IsString } from 'class-validator';
+import {
+  ArrayNotEmpty,
+  IsArray,
+  IsNotEmpty,
+  IsNumber,
+  IsString,
+} from 'class-validator';
 
 export class CreateClinicDto {
   @IsNumber()
   @IsNotEmpty()
   inn: number;
+
+  @IsString()
+  @IsNotEmpty()
+  password: string;
 
   @IsString()
   @IsNotEmpty()
@@ -24,5 +34,5 @@ export class CreateClinicDto {
   @IsArray()
   @ArrayNotEmpty()
   @IsNumber({}, { each: true })
-  needBloods: number[]
+  needBloods: number[];
 }

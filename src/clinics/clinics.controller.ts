@@ -1,4 +1,13 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { ClinicsService } from './clinics.service';
 import { Clinic } from '@prisma/client';
 import { CreateClinicDto } from './dto/create-clinic.dto';
@@ -7,28 +16,16 @@ import { CreateClinicDto } from './dto/create-clinic.dto';
 export class ClinicsController {
   constructor(private readonly clinicsService: ClinicsService) {}
 
-  @Post()
-  create(@Body() clinic: CreateClinicDto): Promise<Clinic> {
-    return this.clinicsService.create({
-      inn: clinic.inn,
-      name: clinic.name,
-      address: clinic.address,
-      latitude: clinic.latitude,
-      longitude: clinic.latitude,
-      needBloods: {
-        connect: clinic.needBloods.map((needBloodId) => ({ id: needBloodId }))
-      }
-    });
-  }
-
   @Post('/join')
-  makeDonation(@Body() data: { clinicId: number; userId: number }): Promise<Clinic> {
+  makeDonation(
+    @Body() data: { clinicId: number; userId: number },
+  ): Promise<Clinic> {
     return this.clinicsService.update(data.clinicId, {
       users: {
         connect: {
-          id: data.userId
-        }
-      }
+          id: data.userId,
+        },
+      },
     });
   }
 
@@ -50,5 +47,33 @@ export class ClinicsController {
   @Delete(':id')
   remove(@Param('id') id: string): Promise<Clinic> {
     return this.clinicsService.remove(+id);
+  }
+
+  @Post('register')
+  async registerClinic(@Body() clinic: CreateClinicDto): Promise<Clinic> {
+    return this.clinicsService.register({
+      inn: clinic.inn,
+      name: clinic.name,
+      latitude: clinic.latitude,
+      longitude: clinic.longitude,
+      address: clinic.address,
+      password: clinic.password,
+      needBloods: {
+        connect: clinic.needBloods.map((needBloodId) => ({ id: needBloodId })),
+      },
+    });
+  }
+
+  @Post('login')
+  async loginClinic(
+    @Body() { inn, password }: { inn: number; password: string },
+  ): Promise<Clinic | null> {
+    const clinic = await this.clinicsService.login(inn, password);
+
+    if (!clinic) {
+      throw new UnauthorizedException();
+    }
+
+    return clinic;
   }
 }

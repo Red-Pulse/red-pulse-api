@@ -16,6 +16,34 @@ import { CreateClinicDto } from './dto/create-clinic.dto';
 export class ClinicsController {
   constructor(private readonly clinicsService: ClinicsService) {}
 
+  @Post('register')
+  async registerClinic(@Body() clinic: CreateClinicDto): Promise<Clinic> {
+    return this.clinicsService.register({
+      inn: clinic.inn,
+      name: clinic.name,
+      latitude: clinic.latitude,
+      longitude: clinic.longitude,
+      address: clinic.address,
+      password: clinic.password,
+      needBloods: {
+        connect: clinic.needBloods.map((needBloodId) => ({ id: needBloodId })),
+      },
+    });
+  }
+
+  @Post('login')
+  async loginClinic(
+    @Body() { inn, password }: { inn: number; password: string },
+  ): Promise<Clinic | null> {
+    const clinic = await this.clinicsService.login(inn, password);
+
+    if (!clinic) {
+      throw new UnauthorizedException();
+    }
+
+    return clinic;
+  }
+
   @Post('/join')
   makeDonation(
     @Body() data: { clinicId: number; userId: number },
@@ -60,33 +88,5 @@ export class ClinicsController {
   @Delete(':id')
   remove(@Param('id') id: string): Promise<Clinic> {
     return this.clinicsService.remove(+id);
-  }
-
-  @Post('register')
-  async registerClinic(@Body() clinic: CreateClinicDto): Promise<Clinic> {
-    return this.clinicsService.register({
-      inn: clinic.inn,
-      name: clinic.name,
-      latitude: clinic.latitude,
-      longitude: clinic.longitude,
-      address: clinic.address,
-      password: clinic.password,
-      needBloods: {
-        connect: clinic.needBloods.map((needBloodId) => ({ id: needBloodId })),
-      },
-    });
-  }
-
-  @Post('login')
-  async loginClinic(
-    @Body() { inn, password }: { inn: number; password: string },
-  ): Promise<Clinic | null> {
-    const clinic = await this.clinicsService.login(inn, password);
-
-    if (!clinic) {
-      throw new UnauthorizedException();
-    }
-
-    return clinic;
   }
 }

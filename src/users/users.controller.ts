@@ -17,35 +17,6 @@ import { faker } from '@faker-js/faker';
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
-  @Get()
-  findAll() {
-    return this.usersService.findAll();
-  }
-
-  @Get(':id')
-  findOne(@Param('id') id: string): Promise<User> {
-    return this.usersService.findOne(+id);
-  }
-
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() user: User): Promise<User> {
-    return this.usersService.update(+id, {
-      firstName: user.firstName,
-      lastName: user.lastName,
-      phone: user.phone,
-      bloodType: {
-        connect: {
-          id: user.bloodTypeId,
-        },
-      },
-    });
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: string): Promise<User> {
-    return this.usersService.remove(+id);
-  }
-
   @Post('register')
   async register(@Body() data: CreateUserDto): Promise<User> {
     return this.usersService.registerUser({
@@ -73,5 +44,34 @@ export class UsersController {
     }
 
     return user;
+  }
+
+  @Get()
+  findAll() {
+    return this.usersService.findAll();
+  }
+
+  @Get(':id')
+  findOne(@Param('id') id: string): Promise<User> {
+    return this.usersService.findOne(+id);
+  }
+
+  @Patch(':id')
+  update(@Param('id') id: string, @Body() user: User): Promise<User> {
+    return this.usersService.update(+id, {
+      firstName: user.firstName,
+      lastName: user.lastName,
+      phone: user.phone,
+      bloodType: {
+        connect: {
+          id: user.bloodTypeId,
+        },
+      },
+    });
+  }
+
+  @Delete(':id')
+  remove(@Param('id') id: string): Promise<User> {
+    return this.usersService.remove(+id);
   }
 }

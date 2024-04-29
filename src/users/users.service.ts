@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { User, Prisma } from '@prisma/client';
+import { tr } from '@faker-js/faker';
 
 @Injectable()
 export class UsersService {
@@ -46,7 +47,10 @@ export class UsersService {
   async findOne(id: number) {
     return this.prisma.user.findUnique({
       where: { id },
-      include: { clinics: true, bloodType: true },
+      include: {
+        clinics: { include: { needBloods: true, users: true } },
+        bloodType: true,
+      },
     });
   }
 
@@ -61,7 +65,7 @@ export class UsersService {
   async registerUser(data: Prisma.UserCreateInput): Promise<User> {
     return this.prisma.user.create({
       data,
-      include: { bloodType: true },
+      include: { bloodType: true, clinics: true },
     });
   }
 
@@ -73,6 +77,12 @@ export class UsersService {
       },
       include: {
         bloodType: true,
+        clinics: {
+          include: {
+            needBloods: true,
+            users: true,
+          },
+        },
       },
     });
   }

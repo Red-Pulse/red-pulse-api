@@ -40,7 +40,10 @@ export class ClinicsService {
   }
 
   async findOne(id: number): Promise<Clinic | null> {
-    return this.prisma.clinic.findUnique({ where: { id } });
+    return this.prisma.clinic.findUnique({
+      where: { id },
+      include: { users: true, needBloods: true },
+    });
   }
 
   async update(id: number, data: Prisma.ClinicUpdateInput): Promise<Clinic> {
@@ -66,7 +69,18 @@ export class ClinicsService {
     });
   }
 
-  async login(inn: number, password: string): Promise<Clinic | null> {
-    return this.prisma.clinic.findFirst({ where: { inn, password } });
+  async login(inn: number, password: string) {
+    return this.prisma.clinic.findFirst({
+      where: { inn, password },
+      select: {
+        id: true,
+        inn: true,
+        needBloods: true,
+        latitude: true,
+        longitude: true,
+        name: true,
+        address: true,
+      },
+    });
   }
 }

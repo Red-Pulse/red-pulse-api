@@ -19,6 +19,7 @@ export class UsersService {
         firstName: true,
         phone: true,
         photo: true,
+        password: true,
       },
     });
   }
@@ -45,7 +46,7 @@ export class UsersService {
   async findOne(id: number) {
     return this.prisma.user.findUnique({
       where: { id },
-      include: { clinics: true },
+      include: { clinics: true, bloodType: true },
     });
   }
 

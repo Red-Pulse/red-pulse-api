@@ -34,7 +34,7 @@ export class ClinicsController {
   @Post('login')
   async loginClinic(
     @Body() { inn, password }: { inn: number; password: string },
-  ): Promise<Clinic | null> {
+  ) {
     const clinic = await this.clinicsService.login(inn, password);
 
     if (!clinic) {

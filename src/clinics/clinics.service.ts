@@ -42,7 +42,7 @@ export class ClinicsService {
   async findOne(id: number): Promise<Clinic | null> {
     return this.prisma.clinic.findUnique({
       where: { id },
-      include: { users: true, needBloods: true },
+      include: { users: { include: { bloodType: true } }, needBloods: true },
     });
   }
 
@@ -65,6 +65,7 @@ export class ClinicsService {
         longitude: true,
         name: true,
         address: true,
+        users: true,
       },
     });
   }
@@ -80,6 +81,7 @@ export class ClinicsService {
         longitude: true,
         name: true,
         address: true,
+        users: true,
       },
     });
   }
